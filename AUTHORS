@@ -1,0 +1,16 @@
+This file contains the list of people involved in the development
+of ODEHubs along its history. If you feel someone is missing, please
+fork and pull-request.
+
+DEVELOPERS
+==========================================================
+ODEHubs was initialy created in 2019 by the ARM Research Group 
+in the University of Almeria and is still under development.
+
+The following list is roughly sorted in reverse chronological order. 
+
+* Jerónimo Ramos Teodoro. Main developer. https://github.com/erjous
+
+* Adrián Giménez Miralles (2019-) https://github.com/adr-97
+  - First simulink blocks characterisation.
+  - Scheme detection algorithm.
