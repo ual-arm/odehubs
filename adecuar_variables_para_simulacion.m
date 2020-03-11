@@ -1,12 +1,12 @@
 %Creo timeseries
 for k=1:n_out
-    eval(strcat('Ech',string(k),'=timeseries(Ech',string(k),',0:T_muestreo:aux_Out*T_muestreo);'));
-    eval(strcat('Edis',string(k),'=timeseries(Edis',string(k),',0:T_muestreo:aux_Out*T_muestreo);'));
-    eval(strcat('Qchp',string(k),'=timeseries(Qchp',string(k),',0:T_muestreo:aux_Out*T_muestreo);'));
-    eval(strcat('Qdisp',string(k),'=timeseries(Qdisp',string(k),',0:T_muestreo:aux_Out*T_muestreo);'));
+    eval(strcat('Ech',string(k),'=timeseries(Ech',string(k),',fecha);'));
+    eval(strcat('Edis',string(k),'=timeseries(Edis',string(k),',fecha);'));
+    eval(strcat('Qchp',string(k),'=timeseries(Qchp',string(k),',fecha);'));
+    eval(strcat('Qdisp',string(k),'=timeseries(Qdisp',string(k),',fecha);'));
 end
 for k=1:n_in
-    eval(strcat('Input',string(k),'=timeseries(input',string(k),',0:T_muestreo:aux_Out*T_muestreo);'));
+    eval(strcat('Input',string(k),'=timeseries(input',string(k),',fecha);'));
 end
 %Retomo nomenclatura dispatch factors de simulación
 aux_m=0;
@@ -43,7 +43,7 @@ try
         for i=1:aux1
             auxiliar=strcat('S_Bin',string(aux(i)));
             auxiliar1=strcat('SS_Bin',string(aux(i)));
-            eval(strcat(auxiliar1,'=timeseries(value(',auxiliar,'),0:T_muestreo:aux_Out*T_muestreo);'));
+            eval(strcat(auxiliar1,'=timeseries(value(',auxiliar,'),fecha);'));
             auxiliar_total=strcat(auxiliar_total,'-',auxiliar1);
         end
         auxiliar_total=strcat('[',auxiliar_total,']');

@@ -2,8 +2,18 @@ clear all;
 close all;
 clc
 % Parámetros a introducir
-run('Inicializacion_datos_grande')%script con los datos para inicialización
+run('Inicializacion_datos_microred')%script con los datos para inicialización
 addpath('Funciones');
+addpath(genpath('Archivos_de_terceros(descomprimir)'))
+
+%Obtención de la fecha
+fecha_inicio=[2014,03,18];%es necesario definir una fecha inicio, con posibilidad de añadir horas, minutos y segundos
+fecha_limite=horizonte;%coge el valor del dato horizonte como límite superior para la creación del vertor de fechas
+fecha_aux=datetime(fecha_inicio) + caldays(0:T_muestreo:fecha_limite);%crea el vector de fechas en datos datetime
+fecha=datestr(datenum(fecha_aux));%convierte el vector de fechas de datos datetime en un vector de arrays de carácteres
+%Con la variable 'fecha', se define en el script
+%'adecuar_variables_para_simulacion' el vector de tiempo de las variables timeseries
+
 load_system(sys);%abro diagrama de Simulink
 tic
 aux_Out=size(Out,2);%tamaño del vector de demandas
