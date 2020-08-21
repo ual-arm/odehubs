@@ -1,0 +1,20 @@
+*MATLAB does not recognize the library I've added
+From https://stackoverflow.com/questions/56617548/adding-a-library-to-the-library-browser
+
+Many of the following steps are over-kill and not required, nonetheless I would suggest doing the following:
+
+Close MATLAB
+Start MATLAB
+Remove your directory from the MATLAB path, saving the change so that it is permanently removed.
+Close MATLAB
+move or rename your slbocks.m file (so that effectively slblocks.m for your custom library doesn't exist)
+Start MATLAB (do not cd into your directory)
+Try to open your custom Simulink library by typing its name at the MATLAB command line. This should generate an error saying the library cannot be found. If the library can be found then go back to step 3.
+Add your directory to the MATLAB path, saving the change so that it is permanently on the path.
+Try to open your custom Simulink library by typing its name at the MATLAB command line. This should open your library. If it doesn't then for some reason MATLAB is not finding your library.
+Close MATLAB
+create slblocks.m for your custom library putting it in your directory
+Start MATLAB
+Start Simulink (by opening a model or creating one from scratch)
+Open the Simulink Library browser
+Your custom library should appear in the list of available libraries.
