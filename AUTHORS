@@ -11,6 +11,6 @@ The following list is roughly sorted in reverse chronological order.
 
 * Jerónimo Ramos Teodoro. Main developer. https://github.com/erjous
 
-* Adrián Giménez Miralles (2019-) https://github.com/adr-97
+* Adrián Giménez Miralles (2019) https://github.com/adr-97
   - First simulink blocks characterisation.
-  - Scheme detection algorithm.
+  - First scheme detection algorithm.
