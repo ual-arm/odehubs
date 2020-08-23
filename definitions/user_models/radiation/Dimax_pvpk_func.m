@@ -27,7 +27,7 @@ function PVpk_max = Dimax_pvpk_func(data,date,samples,tm)
 
 dates=datevec(data.Time); 
 
-%Datos de radiación y Tª
+%Tempreature and radiation data
 G=data.G(1:samples);
 Gbn=data.Gbn(1:samples);
 Gd=data.Gd(1:samples);
@@ -38,7 +38,7 @@ phi_pvpk=36.83;
 psi_pvpk=-2.40;
 gamma_pvpk=-21;
 Act_pvpk=8110.30;
-%Escalado a la décima parte
+%Scaled to the tenth
 Act_pvpk=Act_pvpk/10;
 
 Gtpvpk=...
