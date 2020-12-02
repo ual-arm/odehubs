@@ -161,7 +161,21 @@ for i=1:length(D)
     EH.def.dev.D(i).nd=read_param(D{i},'nd');
 end
 %sort elements
-EH.def.dev.D=table2struct(sortrows(struct2table(EH.def.dev.D),'n'));
+A=EH.def.dev.D;
+Afields = fieldnames(A);
+Acell = struct2cell(A);
+sz = size(Acell);
+% Convert to a matrix
+Acell = reshape(Acell, sz(1), []);      % Px(MxN)
+% Make each field a column
+Acell = Acell';                         % (MxN)xP
+% Sort by first field "name"
+Acell = sortrows(Acell, 1);
+% Put back into original cell array format
+Acell = reshape(Acell', sz);
+% Convert to Struct
+Asorted = cell2struct(Acell, Afields, 1);
+EH.def.dev.D=Asorted;
 
 %Inputs
 for i=1:length(I)
