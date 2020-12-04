@@ -55,45 +55,60 @@ n=get_param(I,'n');
 [~,order]=sort(cellfun(@str2double,n)); %remove zeros and order numbers
 numbers=num2cell(1:length(n));  %remove zeros and order numbers
 n(order)=cellfun(@num2str,numbers,'UniformOutput',false);  %remove zeros and order numbers
+aux=I;
 for i=1:length(n)
     set_param(I{i},'n',n{i});
+    aux{str2double(n{i})}=I{i};
 end
+I=aux;
 
 %Set output numbers
 n=get_param(O,'n');
 [~,order]=sort(cellfun(@str2double,n)); %remove zeros and order numbers
 numbers=num2cell(1:length(n));  %remove zeros and order numbers
 n(order)=cellfun(@num2str,numbers,'UniformOutput',false);  %remove zeros and order numbers
+aux=O;
 for i=1:length(n)
     set_param(O{i},'n',n{i});
+    aux{str2double(n{i})}=O{i};
 end
+O=aux;
 
 %Set device numbers
 n=get_param(D,'n');
 [~,order]=sort(cellfun(@str2double,n)); %remove zeros and order numbers
 numbers=num2cell(1:length(n));  %remove zeros and order numbers
 n(order)=cellfun(@num2str,numbers,'UniformOutput',false);  %remove zeros and order numbers
+aux=D;
 for i=1:length(n)
     set_param(D{i},'n',n{i});
+    aux{str2double(n{i})}=D{i};
 end
+D=aux;
 
 %Set DN numbers
 n=get_param(DN,'n');
 [~,order]=sort(cellfun(@str2double,n)); %remove zeros and order numbers
 numbers=num2cell(1:length(n));  %remove zeros and order numbers
 n(order)=cellfun(@num2str,numbers,'UniformOutput',false);  %remove zeros and order numbers
+aux=DN;
 for i=1:length(n)
     set_param(DN{i},'n',n{i});
+    aux{str2double(n{i})}=DN{i};
 end
+DN=aux;
 
 %Set CN numbers
 n=get_param(CN,'n');
 [~,order]=sort(cellfun(@str2double,n)); %remove zeros and order numbers
 numbers=num2cell(1:length(n));  %remove zeros and order numbers
 n(order)=cellfun(@num2str,numbers,'UniformOutput',false);  %remove zeros and order numbers
+aux=CN;
 for i=1:length(n)
     set_param(CN{i},'n',n{i});
+    aux{str2double(n{i})}=CN{i};
 end
+CN=aux;
 
 %Set storage numbers and labels
 for i=1:length(S)
@@ -146,6 +161,7 @@ end
 
 %% Read parameters from Simulink
 %Devices
+
 for i=1:length(D)
     EH.def.dev.D(i).n=eval(get_param(D{i},'n'));
     EH.def.dev.D(i).I.n=eval(get_param(D{i},'nI'));
@@ -176,7 +192,6 @@ Acell = reshape(Acell', sz);
 % Convert to Struct
 Asorted = cell2struct(Acell, Afields, 1);
 EH.def.dev.D=Asorted;
-
 %Inputs
 for i=1:length(I)
     EH.def.I.t(i,:)=convertCharsToStrings(get_param(I{i},'t'));
@@ -398,6 +413,5 @@ for i=1:length(ind)
         [links] = count_links(h0,p0,dst(ind(i)),src,dst,lines,links,omit);
     end
 end
-
 
 end
