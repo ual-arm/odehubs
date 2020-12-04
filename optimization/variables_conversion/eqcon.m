@@ -41,7 +41,7 @@ for j=1:EH.def.O.N
         if EH.def.O.dF(j)>0
             dOd(j,min(dev):max(dev))=0;
             paths=find(contains(EH.feat.paths.paths,strcat("D",string(EH.def.O.d(j)))));
-            C(j,paths)=-EH.def.O.dF(j)*Cdo(dev,paths);
+            C(j,paths,i)=-EH.def.O.dF(j)*Cdo(dev,paths,i);
         else
             dOd(j,min(dev):max(dev))=-O(j,i);
         end
@@ -127,7 +127,7 @@ for k=i:i+H-2
             if EH.def.O.dF(j)>0
                 dOd(j,min(dev):max(dev))=0;
                 paths=find(contains(EH.feat.paths.paths,strcat("D",string(EH.def.O.d(j)))));
-                C(j,paths)=-EH.def.O.dF(j)*Cdo(dev,paths);
+                C(j,paths,k+1)=-EH.def.O.dF(j)*Cdo(dev,paths,k+1);
             else
                 dOd(j,min(dev):max(dev))=-O(j,k+1);
             end
