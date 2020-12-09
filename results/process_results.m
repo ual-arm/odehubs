@@ -40,9 +40,9 @@ end
 %figures parameters
 aaF=0.25;
 bbF=0.25;
-ccF=0.55;
-ddF=0.45;
-FF=28;
+ccF=0.25;
+ddF=0.25;
+FF=12;
 
 if showmodel
     %% Preset (model)
@@ -53,6 +53,7 @@ if showmodel
         O(:,k)=EH.model.param.O{k};
         C(:,:,k)=EH.model.param.C{k};
         Ci(:,:,k)=EH.model.param.Ci{k};
+        Cdo(:,:,k)=EH.model.param.Cdo{k};
         c(:,k)=EH.model.param.c{k};
         s(:,k)=EH.model.param.s{k};
         M(:,k)=EH.model.data.M{k};
@@ -75,6 +76,7 @@ else
             O(:,k)=EH.control.MPC.model.O{k}(:,1);
             C(:,:,k)=EH.control.MPC.model.C{k}(:,:,1);
             Ci(:,:,k)=EH.control.MPC.model.Ci{k}(:,:,1);
+            Cdo(:,:,k)=EH.control.MPC.model.Cdo{k}(:,:,1);
             c(:,k)=EH.control.MPC.model.c{k}(:,1);
             s(:,k)=EH.control.MPC.model.s{k}(:,1);
             M(:,k)=EH.control.MPC.results.M{k}(:,1);
@@ -96,6 +98,7 @@ else
         O=EH.control.MPC.model.O{1,1};
         C=EH.control.MPC.model.C{1,1,1};
         Ci=EH.control.MPC.model.Ci{1,1,1};
+        Cdo=EH.control.MPC.model.Cdo{1,1,1};
         c=EH.control.MPC.model.c{1,1};
         s=EH.control.MPC.model.s{1,1};
         M=EH.control.MPC.results.M{1,1};
@@ -188,6 +191,21 @@ for j=1:EH.def.O.N
         h(k).FaceColor=colour;
     end
     clearvars aux aux2 k inputs colour
+    
+    %variable dependent outputs
+    if EH.def.O.dF(j)>0
+            dev=find((EH.feat.dev.dev2(:,1)==EH.def.O.d(j))&...
+            (EH.feat.dev.dev2(:,3)==EH.def.O.dO(j)));
+            paths=find(contains(EH.feat.paths.paths,strcat("D",string(EH.def.O.d(j)))));
+            Caux=C;
+            Caux(j,paths,:)=-EH.def.O.dF(j)*Cdo(dev,paths,:);
+            Caux(Caux>0)=0;
+            for i=1:size(O,2)
+            O(j,i)=-Caux(j,:,i)*P(:,i);
+            end
+    end
+    
+    
     %stairs depending on on/off states given by dO
     stairs([t t(end)+hours(tm/60)],[O(j,:) O(j,end)].*[dO(j,:) dO(j,end)],...
         'Color',EH.def.O.colour(j,:),...
@@ -231,43 +249,44 @@ for j=1:EH.def.O.N
     set(yleft,'VerticalAlignment','bottom');   % set the aligment
     set(yleft,'HorizontalAlignment','center');   % set the aligment
     
-    
-    yyaxis right
-    plot([t t(end)+hours(tm/60)],S(j,:),...
-        'Color',EH.def.O.colour(j,:),...
-        'LineWidth',4,'LineStyle','--')
-    set(gca,'YColor',[0,0,0]);
-    
-    if EH.def.O.st_factor(j)>0
-        ylim([0 (EH.model.param.S_max{1}(j)+...
-            (EH.model.param.S_max{1}(j)==0))*EH.def.O.st_factor(j)]);
-    else
-        ylim([EH.def.O.st_ll(j) EH.def.O.st_ul(j)])
-    end
-    
-    
-    if  EH.def.O.st(j)==0
-        ylim([0 1])
-        yticks([0 1])
-        yticklabels({' ',' '})
-    end
-    
-    yright =ylabel(...
-        EH.def.O.labels{j,2},...
-        'FontName','Palatino Linotype','FontSize', FF);
-    
-    pr = get(yright,'position'); % get the current position property
-    pr(1) = 1.18;              % distance
-    set(yright,'Position', pr);   % set the new position
-    set(yright,'VerticalAlignment','bottom');   % set the aligment
-    set(yright,'HorizontalAlignment','center');   % set the aligment
-    
-    labels{length(labels)+1,1}=char(strcat("O_",string(j)));
-    if EH.def.O.ms(j)==1
-        labels{length(labels)+1,1}=char(strcat("M_",string(j)));
-    end
-    if EH.def.O.st(j)==1
-        labels{length(labels)+1,1}=char(strcat("S_",string(j)));
+    if EH.def.O.st(j)~=0
+        yyaxis right
+        plot([t t(end)+hours(tm/60)],S(j,:),...
+            'Color',EH.def.O.colour(j,:),...
+            'LineWidth',4,'LineStyle','--')
+        set(gca,'YColor',[0,0,0]);
+
+        if EH.def.O.st_factor(j)>0
+            ylim([0 (EH.model.param.S_max{1}(j)+...
+                (EH.model.param.S_max{1}(j)==0))*EH.def.O.st_factor(j)]);
+        else
+            ylim([EH.def.O.st_ll(j) EH.def.O.st_ul(j)])
+        end
+
+
+        if  EH.def.O.st(j)==0
+            ylim([0 1])
+            yticks([0 1])
+            yticklabels({' ',' '})
+        end
+
+        yright =ylabel(...
+            EH.def.O.labels{j,2},...
+            'FontName','Palatino Linotype','FontSize', FF);
+
+        pr = get(yright,'position'); % get the current position property
+        pr(1) = 1.18;              % distance
+        set(yright,'Position', pr);   % set the new position
+        set(yright,'VerticalAlignment','bottom');   % set the aligment
+        set(yright,'HorizontalAlignment','center');   % set the aligment
+
+        labels{length(labels)+1,1}=char(strcat("O_",string(j)));
+        if EH.def.O.ms(j)==1
+            labels{length(labels)+1,1}=char(strcat("M_",string(j)));
+        end
+        if EH.def.O.st(j)==1
+            labels{length(labels)+1,1}=char(strcat("S_",string(j)));
+        end
     end
     
     hleg=legend(...
