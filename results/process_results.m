@@ -279,6 +279,7 @@ for j=1:EH.def.O.N
         set(yright,'Position', pr);   % set the new position
         set(yright,'VerticalAlignment','bottom');   % set the aligment
         set(yright,'HorizontalAlignment','center');   % set the aligment
+    end
 
         labels{length(labels)+1,1}=char(strcat("O_",string(j)));
         if EH.def.O.ms(j)==1
@@ -286,9 +287,7 @@ for j=1:EH.def.O.N
         end
         if EH.def.O.st(j)==1
             labels{length(labels)+1,1}=char(strcat("S_",string(j)));
-        end
-    end
-    
+        end    
     hleg=legend(...
         labels,...
         'Location','northeast',...
