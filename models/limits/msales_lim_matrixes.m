@@ -41,7 +41,7 @@ auxmax=10000000; %generic upper limit
 %Create one variable from either coeficients or functions containing the
 %market limit vector for the 'samples' horizon
 for i=1:EH.def.O.N
-    if isvarname(strcat(EH.def.O.l(i),EH.def.O.t(i)))
+    if isvarname(strcat(EH.def.O.t(i),EH.def.O.l(i)))
         if  ischar(EH.def.O.Mmin{i}) %min
             if ismember(EH.def.O.Mmin{i},data.Properties.VariableNames)
                 right_term=['transpose(data.',num2str(EH.def.O.Mmin{i}),');'];
