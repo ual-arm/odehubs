@@ -41,7 +41,7 @@ auxmin=0.0000001;
 %Create one variable from either coeficients or functions containing the
 %prices vector for the 'samples' horizon
 for i=1:EH.def.I.N
-    if isvarname(strcat(EH.def.I.l(i),EH.def.I.t(i)))
+    if isvarname(strcat(EH.def.I.t(i),EH.def.I.l(i)))
         if  ischar(EH.def.I.cost{i}) 
             if ismember(EH.def.I.cost{i},data.Properties.VariableNames)
                 right_term=['transpose(data.',num2str(EH.def.I.cost{i}),');'];
@@ -65,7 +65,7 @@ end
 %different results. %% Comment if not required.
 %when using eval on value 1.1*0.497, the conversion is not precise enough
 %and results in evaluating 1.1*0.497-0.111e-15 instead, which badly
-%influence in the results obtained ¿maybe due to difficulties to represent
+%influence in the results obtained Â¿maybe due to difficulties to represent
 %a number with so many decimals?
 if exist('c_Wi')==1
 c_Wi=c_Wi+0.111e-15; %1.1*0.497+0.111e-15
@@ -89,7 +89,7 @@ s=NaN(EH.def.O.N,samples);
 %Create one variable from either coeficients or functions containing the
 %prices vector for the 'samples' horizon
 for i=1:EH.def.O.N
-    if isvarname(strcat(EH.def.O.l(i),EH.def.O.t(i)))
+    if isvarname(strcat(EH.def.O.t(i),EH.def.O.l(i)))
         if  ischar(EH.def.O.price{i}) 
             if ismember(EH.def.O.price{i},data.Properties.VariableNames)
                 right_term=['transpose(data.',num2str(EH.def.O.price{i}),');'];
