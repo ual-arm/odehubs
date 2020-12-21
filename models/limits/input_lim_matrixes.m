@@ -41,7 +41,7 @@ auxmax=10000000;
 %Create one variable from either coeficients or functions containing the
 %input limit vector for the 'samples' horizon
 for i=1:EH.def.I.N
-    if isvarname(strcat(EH.def.I.l(i),EH.def.I.t(i)))
+    if isvarname(strcat(EH.def.I.t(i),EH.def.I.l(i)))
         if  ischar(EH.def.I.Imin{i}) %min
             if ismember(EH.def.I.Imin{i},data.Properties.VariableNames)
                 right_term=['transpose(data.',num2str(EH.def.I.Imin{i}),');'];
