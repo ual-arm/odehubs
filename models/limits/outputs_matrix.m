@@ -50,7 +50,6 @@ for i=1:EH.def.O.N
             right_term=[num2str(EH.def.O.O{i}),...
                 '*ones(1,samples);'];
         else
-            keyboard
             error('Invalid demand for output %d: %s',i,...
                 strcat(EH.def.O.t(i),EH.def.O.l(i)));
         end
