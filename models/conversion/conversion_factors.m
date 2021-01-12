@@ -45,10 +45,15 @@ Cs=NaN(EH.def.O.N,samples); %Degradation (Cs)
 
 %% Coupling matrix Ci for matrixes P-I,
 %summation of same input resource which goes to different outputs
-Ciaux=cellfun(@min,strfind(EH.feat.paths.paths,"-"));
+if iscell(strfind(EH.feat.paths.paths,"-"))
+    Ciaux=cellfun(@min,strfind(EH.feat.paths.paths,"-"));
+else
+    Ciaux=min(strfind(EH.feat.paths.paths,"-"));
+end
 Ciaux2=char(EH.feat.paths.paths);
 
 devouts=EH.feat.dev.dev2;
+
 
 %get groups of simoultaneous outputs for each device
 %considering only the first output of each group to determinate the input 
