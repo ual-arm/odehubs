@@ -74,6 +74,14 @@ Time=downsample(...
 EH.control.MPC.model.Time=Time(1:rep_MPC);
 EH.control.MPC.model=table2timetable(EH.control.MPC.model);
 
+% Fix single elements producing non-cell variables
+notcell_variables=EH.control.MPC.model.Properties.VariableNames(...
+          not(varfun(@iscell,EH.control.MPC.model,'OutputFormat','uniform')));
+for j =1:length(notcell_variables)
+    eval(strcat('EH.control.MPC.model.',notcell_variables{j},...
+        '={(EH.control.MPC.model{:,notcell_variables(j)})};'))
+end
+
 % Matrix size for optimization using MILP on Matlab
 EH.control.MPC.solver=repmat(struct(...
     'lb',NaN(EH.feat.nx*EH.simparam.samples_MPC,1),... %lower bounds
@@ -98,6 +106,14 @@ EH.control.MPC.solver=struct2table(EH.control.MPC.solver,'AsArray',true);
 EH.control.MPC.solver.Time=Time(1:rep_MPC);
 EH.control.MPC.solver=table2timetable(EH.control.MPC.solver);
 
+% Fix single elements producing non-cell variables
+notcell_variables=EH.control.MPC.solver.Properties.VariableNames(...
+          not(varfun(@iscell,EH.control.MPC.solver,'OutputFormat','uniform')));
+for j =1:length(notcell_variables)
+    eval(strcat('EH.control.MPC.solver.',notcell_variables{j},...
+        '={(EH.control.MPC.solver{:,notcell_variables(j)})};'))
+end
+
 %(M,P,Qch,Qdis,S,int_I,int_M,int_Qch,int_Qdis,int_devices)+dO+I
 EH.control.MPC.results=repmat(struct(...
     'M',NaN(EH.def.O.N,EH.simparam.samples_MPC),... %Market sales matrix (M)
@@ -115,6 +131,14 @@ EH.control.MPC.results=repmat(struct(...
 EH.control.MPC.results=struct2table(EH.control.MPC.results,'AsArray',true);
 EH.control.MPC.results.Time=Time(1:rep_MPC);
 EH.control.MPC.results=table2timetable(EH.control.MPC.results);
+
+% Fix single elements producing non-cell variables
+notcell_variables=EH.control.MPC.results.Properties.VariableNames(...
+          not(varfun(@iscell,EH.control.MPC.results,'OutputFormat','uniform')));
+for j =1:length(notcell_variables)
+    eval(strcat('EH.control.MPC.results.',notcell_variables{j},...
+        '={(EH.control.MPC.results{:,notcell_variables(j)})};'))
+end
 
 %% Data for model simulation
 
@@ -222,6 +246,14 @@ EH.model.param.Cs=cellfun(@ctranspose,Cs,'UniformOutput',false);
 EH.model.param.c=cellfun(@ctranspose,c,'UniformOutput',false);
 EH.model.param.s=cellfun(@ctranspose,s,'UniformOutput',false);
 
+% Fix single elements producing non-cell variables
+notcell_variables=EH.model.param.Properties.VariableNames(...
+          not(varfun(@iscell,EH.model.param,'OutputFormat','uniform')));
+for j =1:length(notcell_variables)
+    eval(strcat('EH.model.param.',notcell_variables{j},...
+        '={(EH.model.param{:,notcell_variables(j)})};'))
+end
+
 EH.model.data=repmat(struct(...
     'infeas',zeros(1,1),... %Constraints violation (infeasibilities)
     'S0',NaN(EH.def.O.N,1),... %Initial storage matrix (S0)
@@ -241,5 +273,14 @@ EH.model.data=struct2table(EH.model.data);
 EH.model.data.Time=downsample(EH.simparam.data.Time(1:EH.simparam.nm),...
     EH.simparam.tm);
 EH.model.data=table2timetable(EH.model.data);
+
+% Fix single elements producing non-cell variables
+notcell_variables=EH.model.data.Properties.VariableNames(...
+          not(varfun(@iscell,EH.model.data,'OutputFormat','uniform')));
+for j =1:length(notcell_variables)
+    eval(strcat('EH.model.data.',notcell_variables{j},...
+        '=num2cell(EH.model.data{:,notcell_variables(j)});'))
+end
+
 end
 

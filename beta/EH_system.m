@@ -122,5 +122,13 @@ if data.infeas>0
     warning('%d contraints violation at iteration %d',data.infeas,k)
 end
 
+% Fix single elements producing non-cell variables
+notcell_variables=data.Properties.VariableNames(...
+          not(varfun(@iscell,data,'OutputFormat','uniform')));
+for j =1:length(notcell_variables)
+    eval(strcat('data.',notcell_variables{j},...
+        '=num2cell(data{:,notcell_variables(j)});'))
+end
+
 end
 

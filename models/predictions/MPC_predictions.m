@@ -60,7 +60,7 @@ if predict
 else
     O=outputs_matrix(EH,data,date,model.samples,tm);
 end
-model.O{:}=cell2mat(O)';
+model.O={cell2mat(O)'};
 
 %Inputs limits (I)
 if predict
@@ -68,8 +68,8 @@ if predict
 else
     [I_max,I_min]=input_lim_matrixes(EH,data,date,model.samples,tm);
 end
-model.I_max{:}=cell2mat(I_max)';
-model.I_min{:}=cell2mat(I_min)';
+model.I_max={cell2mat(I_max)'};
+model.I_min={cell2mat(I_min)'};
 
 %Devices inputs limits (D)
 if predict
@@ -77,10 +77,10 @@ if predict
 else
     [Di_max,Di_min,Do_max,Do_min]=dev_lim_matrixes(EH,data,date,model.samples,tm);
 end
-model.Di_max{:}=cell2mat(Di_max)';
-model.Di_min{:}=cell2mat(Di_min)';
-model.Do_max{:}=cell2mat(Do_max)';
-model.Do_min{:}=cell2mat(Do_min)';
+model.Di_max={cell2mat(Di_max)'};
+model.Di_min={cell2mat(Di_min)'};
+model.Do_max={cell2mat(Do_max)'};
+model.Do_min={cell2mat(Do_min)'};
 
 %Market sales limits (M)
 if predict
@@ -88,12 +88,12 @@ if predict
 else
     [M_max,M_min]=msales_lim_matrixes(EH,data,date,model.samples,tm);
 end
-model.M_max{:}=cell2mat(M_max)';
-model.M_min{:}=cell2mat(M_min)';
+model.M_max={cell2mat(M_max)'};
+model.M_min={cell2mat(M_min)'};
 
 %Path limits (P)
-model.P_max{:}=Inf*ones(EH.feat.paths.N,model.samples);
-model.P_min{:}=0*ones(EH.feat.paths.N,model.samples);
+model.P_max={Inf*ones(EH.feat.paths.N,model.samples)};
+model.P_min={0*ones(EH.feat.paths.N,model.samples)};
 
 %Storage limits (S,Qdis,Qch)
 if predict
@@ -103,12 +103,12 @@ else
         Qch_min,Qch_max,...
         S_min,S_max]=storage_lim_matrixes(EH,data,date,model.samples,tm);
 end
-model.Qdis_min{:}=cell2mat(Qdis_min)';
-model.Qdis_max{:}=cell2mat(Qdis_max)';
-model.Qch_min{:}=cell2mat(Qch_min)';
-model.Qch_max{:}=cell2mat(Qch_max)';
-model.S_min{:}=cell2mat(S_min)';
-model.S_max{:}=cell2mat(S_max)';
+model.Qdis_min={cell2mat(Qdis_min)'};
+model.Qdis_max={cell2mat(Qdis_max)'};
+model.Qch_min={cell2mat(Qch_min)'};
+model.Qch_max={cell2mat(Qch_max)'};
+model.S_min={cell2mat(S_min)'};
+model.S_max={cell2mat(S_max)'};
 
 %conversion factors (C,Ci,Cdis,Cch,L)
 if predict
@@ -116,13 +116,13 @@ if predict
 else
     [C,Ci,Cdis,Cch,Cs,Cdi,Cdo]=conversion_factors(EH,data,date,model.samples,tm);
 end
-model.C{:}=cell2mat(reshape(C,[1,1,model.samples]));
-model.Ci{:}=cell2mat(reshape(Ci,[1,1,model.samples]));
-model.Cdis{:}=cell2mat(Cdis)';
-model.Cch{:}=cell2mat(Cch)';
-model.Cs{:}=cell2mat(Cs)';
-model.Cdi{:}=cell2mat(reshape(Cdi,[1,1,model.samples]));
-model.Cdo{:}=cell2mat(reshape(Cdo,[1,1,model.samples]));
+model.C={cell2mat(reshape(C,[1,1,model.samples]))};
+model.Ci={cell2mat(reshape(Ci,[1,1,model.samples]))};
+model.Cdis={cell2mat(Cdis)'};
+model.Cch={cell2mat(Cch)'};
+model.Cs={cell2mat(Cs)'};
+model.Cdi={cell2mat(reshape(Cdi,[1,1,model.samples]))};
+model.Cdo={cell2mat(reshape(Cdo,[1,1,model.samples]))};
 
 %cost/sales path matrixes (c,s)
 if predict
@@ -130,7 +130,14 @@ if predict
 else
     [c,s]=price(EH,data,date,model.samples,tm);
 end
-model.c{:}=cell2mat(c)';
-model.s{:}=cell2mat(s)';
+model.c={cell2mat(c)'};
+model.s={cell2mat(s)'};
 
+% Fix single elements producing non-cell variables
+notcell_variables=model.Properties.VariableNames(...
+          not(varfun(@iscell,model,'OutputFormat','uniform')));
+for j =1:length(notcell_variables)
+    eval(strcat('model.',notcell_variables{j},...
+        '=num2cell(model{:,notcell_variables(j)});'))
+end
 end

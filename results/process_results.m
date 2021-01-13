@@ -93,7 +93,7 @@ else
         %% Preset (Scheduling)
         t=EH.control.MPC.model.Time:minutes(EH.simparam.tm_MPC):...
           EH.control.MPC.model.Time+...
-          minutes(EH.control.MPC.model.H-1);
+          minutes(EH.control.MPC.model.H{:}-1);
         tm=EH.simparam.tm_MPC;
         O=EH.control.MPC.model.O{1,1};
         C=EH.control.MPC.model.C{1,1,1};
@@ -109,7 +109,7 @@ else
         dD=EH.control.MPC.results.dD{1,1};
         dQch=EH.control.MPC.results.dQch{1,1};
         dQdis=EH.control.MPC.results.dQdis{1,1};
-        for k=1:EH.control.MPC.model.samples
+        for k=1:EH.control.MPC.model.samples{:}
             I(:,k)=Ci(:,:,k)*P(:,k);
         end
     end
@@ -150,9 +150,16 @@ for j=1:EH.def.O.N
     %Find paths corresponding to oputput j
     aux=strfind(EH.feat.paths.inv_paths,strcat("O",string(j)));
     Pvar=[];
+    if iscell(aux)
     for k=1:length(aux)
         if aux{k}==1
             Pvar=[Pvar k];
+            
+        end
+    end
+    else       
+        if aux==1
+            Pvar=[Pvar 1];            
         end
     end
     clearvars aux k

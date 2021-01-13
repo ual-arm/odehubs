@@ -98,5 +98,22 @@ results = solver2model(EH,solver.XOPT{:},H,results);
 
 %Measure computation time
 solver.topt=toc(tini);
+
+% Fix single elements producing non-cell variables
+notcell_variables=results.Properties.VariableNames(...
+          not(varfun(@iscell,results,'OutputFormat','uniform')));
+for j =1:length(notcell_variables)
+    eval(strcat('results.',notcell_variables{j},...
+        '=num2cell(results{:,notcell_variables(j)});'))
+end
+
+% Fix single elements producing non-cell variables
+notcell_variables=solver.Properties.VariableNames(...
+          not(varfun(@iscell,solver,'OutputFormat','uniform')));
+for j =1:length(notcell_variables)
+    eval(strcat('solver.',notcell_variables{j},...
+        '=num2cell(solver{:,notcell_variables(j)});'))
+end
+
 end
 
