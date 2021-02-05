@@ -287,7 +287,7 @@ for i=1:length(EH.def.dev.S)
         else
             error('Invalid n discharge efciciency for device %d: %s',i,EH.def.dev.S(i).l);
         end
-        eval(strcat(EH.def.dev.S(i).l,'_d=1/',right_term)); %the value is inverted
+        eval(strcat(EH.def.dev.S(i).l,'_d=1./',right_term)); %the value is inverted
         
         if  ischar(EH.def.dev.S(i).ns{:}) %degradation
             if ismember(EH.def.dev.S(i).ns{:},data.Properties.VariableNames)
@@ -312,9 +312,9 @@ end
 %Inexistent storage systems
 for i=1:EH.def.O.N
     if EH.def.O.st(i)==0
-        eval(strcat(EH.def.O.t(i),EH.def.O.l(i),'_c=ones(1,samples);'))
-        eval(strcat(EH.def.O.t(i),EH.def.O.l(i),'_d=ones(1,samples);'))
-        eval(strcat(EH.def.O.t(i),EH.def.O.l(i),'_s=ones(1,samples);'))
+        eval(strcat(EH.def.O.t(i),EH.def.O.l(i),'_c=ones(samples,1);'))
+        eval(strcat(EH.def.O.t(i),EH.def.O.l(i),'_d=ones(samples,1);'))
+        eval(strcat(EH.def.O.t(i),EH.def.O.l(i),'_s=ones(samples,1);'))
     end
 end
 
